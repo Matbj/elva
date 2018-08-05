@@ -1,0 +1,9 @@
+django
+channels
+psycopg2-binary
+channels_redis
+pytz
+django-choices
+pytest-django
+# pywin32  # IF WINDOWS
+Twisted[tls,http2]  # pip install -U Twisted[tls,http2]

@@ -1,0 +1,262 @@
+#app {
+    height: 100%;
+}
+
+#message {
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    z-index: 10000;
+}
+
+.buttons {
+    z-index: 99999;
+    position: absolute;
+    bottom: 0;
+    justify-content: center;
+    margin-bottom: 0 !important;
+}
+
+.last-play {
+    position: absolute;
+    bottom:  0;
+    right: 0;
+    padding: 0.3em;
+    font-size: 6px;
+}
+
+.score-table {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+.score {
+
+}
+
+.deck {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.3em;
+    font-size: 8px;
+}
+
+.deck-count {
+    background-color: rgba(250,250,250,0.65);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0.3em;
+    font-size: 12px;
+    border-radius: 5em; // round
+margin: auto;
+    font-weight: bold;
+}
+
+.middle {
+    min-height: 60%;
+    width: 100%;
+    position: relative;
+    top: 15%;
+    bottom: 25%;
+    transition: all 1s;
+    display: inline-flex;
+    justify-content: center;
+}
+
+.board {
+    margin: auto;
+    flex-wrap: wrap;
+    padding: 0 4em;
+    display: inline-flex;
+    justify-content: center;
+}
+.board-leave-to {
+    opacity: 0;
+    transition: all 0.3s;
+}
+.board-enter {
+    transition: all 1s;
+    opacity: 0;
+}
+.board-leave-active {
+    position: absolute;
+}
+
+.player-space {
+    min-height: 7em;
+    height: 25%;
+    display: inline-flex;
+    justify-content: center;
+    margin: auto;
+    background-color: darkgreen;
+}
+
+
+.hand {
+    margin: auto;
+    padding: .2em;
+    flex-wrap: wrap;
+    display: inline-flex;
+    /*min-width: 20em;*/
+    justify-content: center;
+    transition: all 1s;
+}
+.hand-name {
+    position: absolute;
+    color: white;
+    top: 0;
+    right: 0;
+    padding: 0 0.5em;
+}
+.hand-enter {
+    transition: all 1s;
+    opacity: 0;
+    transform: translateY(30px);
+}
+.hand-leave-to {
+    opacity: 0;
+    transform: translateY(-20em) rotateZ(600deg);
+    transition: all 0.3s;
+}
+.hand-leave-active {
+    position: absolute;
+}
+
+.player {
+    z-index: 9999;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+}
+
+.opponent-space {
+    min-height: 4.5em;
+    display: inline-flex;
+    justify-content: center;
+    margin: auto;
+    background-color: darkgreen;
+    width: 20em;
+}
+.opponent {
+    font-size: 10px;
+}
+
+.opponent_left {
+    z-index: 100000;
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: rotate(-90deg) translate(5em, -7.7em);
+}
+
+.opponent_right {
+    z-index: 10000;
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: rotate(90deg) translate(-5em, -7.7em);
+}
+
+.opponent_top {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+.opponent-enter {
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: all 2s;
+}
+.opponent-leave-to {
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: rotateZ(600deg);
+    transition: all 1s !important;
+}
+.opponent-leave-active {
+    position: absolute;
+}
+
+.in_turn {
+    border-color: red;
+    border-style: dashed;
+    border-width: 0.3em;
+    z-index: 99999;
+}
+
+.card {
+    width: 4em;
+    height: 6em;
+    float: left;
+    margin-right: 0.2em;
+    margin-bottom: 0.2em;
+    border-radius: 0.2em;
+    transition: all 0.5s;
+}
+
+.card__suit {
+    width: 100%;
+    display: block;
+}
+
+.card__suit--top {
+    text-align: left;
+    padding-left: 0.3em;
+    font-size: 1.3em;
+}
+
+.card__suit--bottom {
+    position: absolute;
+    bottom: 0;
+    text-align: left;
+    transform: rotate(180deg);
+    padding-left: 0.3em;
+    font-size: 1.3em;
+}
+.back {
+    background-color: white;
+    background: no-repeat center center;
+    background-image: url("/static/ws/svg/deck/faces/back.png");
+    background-size: cover;
+}
+.card__number {
+    width: 100%;
+    position: absolute;
+    top: 38%;
+    text-align: center;
+    font-size: 1.5em;
+    line-height: 1em;
+}
+
+.red {
+    color: #FF0000;
+}
+
+.black {
+    color: #000;
+}
+
+.selected_card {
+    background-color: lightskyblue;
+}
+
+.pressed_card {
+    background-color: lightskyblue;
+    transition: all 0.2s;
+}
+
+.cardtrans-enter-active, .cardtrans-leave-active {
+    transition: opacity .5s;
+}
+.cardtrans-enter, .cardtrans-leave-to {
+    opacity: 0;
+}

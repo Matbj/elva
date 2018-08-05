@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Elva{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "/ws/css/base.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "/ws/css/bulma.css" %}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+<script type="application/javascript">
+    {% block js_config %}{% endblock %}
+</script>
+
+{% block body %}{% endblock %}
+
+<script src="{% static "ws/js/helpers.js" %}"></script>
+<script src="{% static "ws/js/vue.js" %}"></script>
+<script src="{% static "channels/js/websocketbridge.js" %}" type="application/javascript"></script>
+<script src="{% static "ws/js/jquery-3.3.1.js" %}" type="application/javascript"></script>
+<script src="{% static "ws/js/lodash.js" %}" type="application/javascript"></script>
+
+<script>
+    {% block js %}{% endblock %}
+</script>
+{% block script_import_js %}{% endblock %}
+</body>
+</html>
