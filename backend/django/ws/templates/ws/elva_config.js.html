@@ -1,0 +1,15 @@
+{% if False %}<script type="application/javascript">{% endif %}
+
+const elva_config = {
+    room_name_json: {{ match_id }},
+    ws_game_url: '/ws/pasur/{{ match_id }}/',
+    player_name: '{{ player.name }}',
+    player_actions: {
+        DEAL_CARDS: '{{ PlayerActions.deal_cards }}',
+        PLAY_CARD: '{{ PlayerActions.play_card }}',
+        COUNT_POINTS: '{{ PlayerActions.count_points }}',
+        NEXT_GAME: '{{ PlayerActions.next_game }}'
+    }
+};
+
+{% if False %}</script>{% endif %}

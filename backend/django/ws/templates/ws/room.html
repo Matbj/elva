@@ -1,0 +1,15 @@
+{% load staticfiles %}
+<html>
+
+<body>
+
+<textarea title="messages" id="chat-log" cols="100" rows="5"></textarea><br/>
+<input title="chat-input" id="chat-message-input" type="text" size="100"/><br/>
+<input id="chat-message-submit" type="button" value="Send"/>
+
+
+<script type="application/javascript">
+    {% include "ws/elva_config.js.html" %}
+</script>
+</body>
+</html>

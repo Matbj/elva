@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: elva
+      POSTGRES_PASSWORD: elva_password
+      POSTGRES_DB: elva
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+
+  channel_layers:
+    image: redis:latest
+
+  elva:
+    build:
+      context: ./backend
+    ports:
+      - 8000:80
+    depends_on:
+      - database
+      - channel_layers
+    environment:
+      - DATABASE_PASSWORD=elva_password
+      - DATABASE_HOST=database
+      - DATABASE_PORT=5432
+      - CHANNEL_LAYERS_HOST=channel_layers
+      - CHANNEL_LAYERS_PORT=6379
+      - STATIC_ROOT=/srv/static
+    restart: always
+
+volumes:
+  database_data:

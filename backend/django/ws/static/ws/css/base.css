@@ -1,0 +1,15 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    color: #333;
+    font-family: 'Open Sans', sans-serif;
+    user-select: none;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-color: darkgreen;
+}
+
+[v-cloak] {
+    display: none;
+    content: 'Loading...';
+}

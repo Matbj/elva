@@ -1,0 +1,11 @@
+.create-user {
+    display: table;
+    height:100%;
+    width: 100%;
+}
+
+.create-user-form {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10%;
+}

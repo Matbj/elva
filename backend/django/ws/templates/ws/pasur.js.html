@@ -1,0 +1,32 @@
+{% if False %}<script type="application/javascript">{% endif %}
+
+const pasur = {};
+pasur.container = document.getElementById('pasur');
+
+// create Deck
+let deck = Deck();
+
+// add to DOM
+deck.mount(pasur.container);
+
+deck.cards.forEach(function (card, i) {
+    card.setSide('back');
+
+    // explode
+    card.animateTo({
+        delay: 1000 + i * 3, // wait 1 second + i * 2 ms
+        duration: 500,
+        ease: 'quartOut',
+
+        x: -window.innerWidth/2*0.85,
+        y: -window.innerHeight/2*0.85
+    });
+    card.enableDragging();
+
+    function _card_clicked (e){
+        elva.card_clicked(card, e);
+    }
+    card.$el.addEventListener('mousedown', _card_clicked);
+    card.$el.addEventListener('touchstart', _card_clicked);
+});
+{% if False %}</script>{% endif %}

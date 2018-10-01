@@ -1,0 +1,18 @@
+{% extends "ws/base.html" %}
+{% load staticfiles %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static "/ws/css/user-setup.css" %}">
+{% endblock %}
+
+{% block body %}
+    <div class="create-user">
+        <form method="post" class="create-user-form" onsubmit="$('form .control').addClass('is-loading')">
+            <div class="control is-large">
+                <input class="input is-rounded is-large" autofocus autocomplete="off"
+                       type="text" name="username" placeholder="Who are you?">
+            </div>
+            {% csrf_token %}
+        </form>
+    </div>
+{% endblock %}
