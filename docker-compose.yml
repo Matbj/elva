@@ -18,17 +18,19 @@ services:
     build:
       context: ./backend
     ports:
-      - 8000:80
+      - 10001:80
     depends_on:
       - database
       - channel_layers
     environment:
+      - PYTHONUNBUFFERED=1
       - DATABASE_PASSWORD=elva_password
       - DATABASE_HOST=database
       - DATABASE_PORT=5432
       - CHANNEL_LAYERS_HOST=channel_layers
       - CHANNEL_LAYERS_PORT=6379
       - STATIC_ROOT=/srv/static
+      - ELVA_SECRET_KEY=${ELVA_SECRET_KEY}
     restart: always
 
 volumes:

@@ -10,7 +10,7 @@ RUN pip install -r requirements.txt
 
 ADD django/ /srv/
 
-RUN python manage.py collectstatic --no-input
+RUN ELVA_SECRET_KEY='placeholder' python manage.py collectstatic --no-input
 
 ADD etc_config/ /etc/
 RUN rm -f /etc/nginx/sites-enabled/default
