@@ -15,5 +15,4 @@ RUN ELVA_SECRET_KEY='placeholder' python manage.py collectstatic --no-input
 ADD etc_config/ /etc/
 RUN rm -f /etc/nginx/sites-enabled/default
 RUN mkdir -p /run/daphne
-CMD supervisord -c /etc/supervisor/conf.d/elva.supervisor.conf --nodaemon
-#   daphne -b 0.0.0.0 -p 80 elva.asgi:application
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/elva.supervisor.conf", "--nodaemon"]
