@@ -279,7 +279,7 @@ class Pasur:
 
         player_points = {player.identifier: 0 for player in self.players}
         clubs_rank = sorted(self.players, key=lambda p: p.clubs_count(), reverse=True)
-        if clubs_rank[0].clubs_count() != clubs_rank[1].clubs_count():
+        if clubs_rank[0].clubs_count() != clubs_rank[1].clubs_count():  # Two top clubs owners has different clubs count
             player_points[clubs_rank[0].identifier] += CLUBS_WIN_POINT
 
         for player in self.players:
@@ -293,8 +293,14 @@ class Pasur:
                 elif card.number == 10 and card.color == DIAMONDS:
                     player_points[player.identifier] += DIAMONDS_TEN_POINT
 
-        for player in self.surs:
-            player_points[player.identifier] += SUR_POINT
+        if self.surs:
+            surs_per_player = {player.identifier: 0 for player in self.players}
+            for player in self.surs:
+                surs_per_player[player.identifier] += 1
+
+            lowest_sur_count = min(surs_per_player.values())
+            for player_identifier, sur_count in surs_per_player.items():
+                player_points[player_identifier] += (sur_count - lowest_sur_count) * SUR_POINT
 
         self.status = STATUS.finished
 
