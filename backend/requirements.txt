@@ -7,3 +7,5 @@ django-choices
 pytest-django
 # pywin32  # IF WINDOWS
 Twisted[tls,http2]  # pip install -U Twisted[tls,http2]
+pytest-env
+mock

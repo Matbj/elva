@@ -1,0 +1,25 @@
+.pasur-menu-container {
+    height:100%;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.pasur-menu-table {
+    /*padding: 10%;*/
+}
+
+.pasur-menu-match-card {
+    margin: 1em;
+    padding: 0.7em;
+    transition: all 0.3s;
+}
+
+.pasur-menu-match-card:hover {
+    background-color: #00c4a7;
+}
+@media (min-width: 800px) {
+    .pasur-menu-match-card-outer {
+        float: left;
+        width: 50%;
+    }
+}
