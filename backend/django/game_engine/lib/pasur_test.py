@@ -4,7 +4,8 @@ import pytest
 from mock import patch
 
 from game_engine.lib.card_holders import Player, Card
-from game_engine.lib.pasur import Pasur, _find_possible_11
+from game_engine.lib.pasur import Pasur, _find_possible_11, CLUBS_WIN_POINT, SUR_POINT, JACK_POINT, ACE_POINT, \
+    DIAMONDS_TEN_POINT, CLUBS_TWO_POINT
 
 
 @pytest.fixture()
@@ -17,6 +18,17 @@ def pasur_with_two_players(pasur: Pasur):
     pasur.add_player(Player('1'))
     pasur.add_player(Player('2'))
     return pasur
+
+
+@pytest.fixture()
+def pasur_with_two_players_all_cards_played(pasur_with_two_players: Pasur):
+    for card in pasur_with_two_players.deck.list_all_cards():
+        card.set_collected()
+        pasur_with_two_players.deck.move_card(
+            card=card,
+            to_card_holder=sorted(pasur_with_two_players.players, key=lambda p: p.card_count_collected())[0],
+        )
+    return pasur_with_two_players
 
 
 def test_give_cards_to_player(pasur_with_two_players: Pasur):
@@ -63,8 +75,8 @@ def test_play_card_no_collect(pasur_with_two_players: Pasur):
     player = pasur_with_two_players.players[0]
     with patch_card_pop_sequence(pasur=pasur_with_two_players,
                                  sequence=[
-                                     8, 1, 9, 2,  # player 1
-                                     4, 5, 6, 7,  # player 2
+                                     7, 1, 9, 2,  # player 1
+                                     4, 5, 6, 8,  # player 2
                                      3, 14, 27, 40,  # board
                                  ]):
         pasur_with_two_players.deal_cards()
@@ -130,6 +142,22 @@ def test_play_card_collect_3_6_2(pasur_with_two_players: Pasur):
     assert Card(1) in [c for c in player.list_all_cards() if c.collected]
     assert Card(2) in [c for c in player.list_all_cards() if c.collected]
     assert Card(5) in [c for c in player.list_all_cards() if c.collected]
+
+
+def test_count_points(pasur_with_two_players_all_cards_played: Pasur):
+    pasur_with_two_players_all_cards_played.surs.append(pasur_with_two_players_all_cards_played.players[0])
+    pasur_with_two_players_all_cards_played.surs.append(pasur_with_two_players_all_cards_played.players[0])
+    pasur_with_two_players_all_cards_played.surs.append(pasur_with_two_players_all_cards_played.players[0])
+    pasur_with_two_players_all_cards_played.surs.append(pasur_with_two_players_all_cards_played.players[1])
+    pasur_with_two_players_all_cards_played.surs.append(pasur_with_two_players_all_cards_played.players[1])
+
+    player_points = pasur_with_two_players_all_cards_played.count_points()
+    assert player_points[pasur_with_two_players_all_cards_played.players[0].identifier] == (
+        CLUBS_WIN_POINT + DIAMONDS_TEN_POINT + 2*ACE_POINT + 2*JACK_POINT + SUR_POINT
+    )
+    assert player_points[pasur_with_two_players_all_cards_played.players[1].identifier] == (
+            2 * ACE_POINT + 2 * JACK_POINT + CLUBS_TWO_POINT
+    )
 
 
 def patch_card_pop_sequence(pasur: Pasur, sequence: List[int]):
