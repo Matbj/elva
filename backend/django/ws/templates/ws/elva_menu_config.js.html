@@ -1,0 +1,10 @@
+<!--suppress JSUnusedLocalSymbols -->
+{% if False %}<script type="application/javascript">{% endif %}
+
+const elva_menu_config = {
+    ws_menu_url: '/ws/pasur/',
+    ws_new_game_url: {% url "new_pasur_match" %},
+    player_name: '{{ player.name }}',
+};
+
+{% if False %}</script>{% endif %}

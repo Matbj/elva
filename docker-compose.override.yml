@@ -3,11 +3,11 @@ version: '3'
 services:
   database:
     ports:
-      - 54320:5432
+      - 54325:5432
 
   channel_layers:
     ports:
-    - 6379:6379
+    - 63795:6379
 
   elva:
     environment:
