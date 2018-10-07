@@ -70,6 +70,16 @@ margin: auto;
     justify-content: center;
 }
 
+.warning-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: palevioletred;
+    font-weight: bold;
+    font-size: 2em;
+}
+
 .board {
     margin: auto;
     flex-wrap: wrap;

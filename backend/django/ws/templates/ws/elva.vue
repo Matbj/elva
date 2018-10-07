@@ -55,6 +55,9 @@
                 {{ player }}: {{score.current_game}} ({{score.total}})<br/>
             </div>
         </div>
+        <div class="warning-message" v-if="warning_message && first_message_received">
+            {{warning_message}}
+        </div>
         <!--<div id="message"></div>-->
     </div>
     <div class="player-space player" :class="is_in_turn(player_identifier)">

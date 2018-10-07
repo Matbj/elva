@@ -10,9 +10,15 @@ elva.webSocketBridge = new channels.WebSocketBridge();
 elva.webSocketBridge.connect(elva_config.ws_game_url);
 elva.webSocketBridge.socket.addEventListener('open', function() {
     console.log("Connected to WebSocket");
+    if (elva.app) {
+        elva.app.update_status();
+    }
 });
 elva.webSocketBridge.socket.addEventListener('close', function() {
     console.log("Disconnected from WebSocket");
+    if (elva.app) {
+        elva.app.update_status();
+    }
 });
 
 class Card {
@@ -64,6 +70,8 @@ elva.webSocketBridge.listen(function(action, stream) {
     }
     let message_box = $('#message');
     message_box.html(action['message']);
+    elva.app.first_message_received = true;
+    elva.app.update_status();
 });
 
 elva.chat_message_input.focus();
@@ -98,6 +106,7 @@ Vue.component('back_card', {
 elva.app = new Vue({
     el: '#app',
     data: {
+        first_message_received: false,
         ranks: ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'],
         suits: [
             '♠',
@@ -124,6 +133,8 @@ elva.app = new Vue({
         last_played_card: null,
         last_collected_cards: [],
         player_points: {},
+        is_connected: false,
+        warning_message: '',
     },
     methods: {
         highlight: function (on_or_off, event) {
@@ -185,6 +196,18 @@ elva.app = new Vue({
             if (this.opponents.length === 1) return opponent_top;
             else return [opponent_left, opponent_top, opponent_right][index];
         },
+        update_status: function () {
+            this.is_connected = elva.webSocketBridge.socket.readyState === elva.webSocketBridge.socket.OPEN;
+            if (!this._isMounted) {
+                this.warning_message = 'loading...';
+            } else if (this.opponents.length === 0) {
+                this.warning_message = "Invite opponent to the game";
+            } else if (!this.is_connected) {
+                this.warning_message = "You are not connected to the server, retrying...";
+            } else {
+                this.warning_message = '';
+            }
+        },
     },
     computed: {
         collected_cards: function () {
@@ -210,6 +233,9 @@ elva.app = new Vue({
         },
         next_game_action_active: function () {
             return ['finished', 'cancelled'].contains(this.game_phase);
-        }
+        },
+    },
+    mounted: function () {
+        this.update_status();
     }
 });
