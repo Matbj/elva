@@ -20,20 +20,20 @@
                   :class="selected_class(card.id)"
             />
         </transition-group>
-        <div class="buttons">
+        <div class="buttons" v-if="count_points_action_active || deal_cards_action_active || next_game_action_active">
             <button class="button"
                     v-on:click="count_points()"
-                    v-if="no_player_has_cards_on_hand && number_of_cards_in_deck === 0 && Object.keys(player_points).length === 0">
+                    :disabled="!count_points_action_active">
                 Count points
             </button>
             <button class="button"
                     v-on:click="deal_cards()"
-                    v-if="no_player_has_cards_on_hand && number_of_cards_in_deck > 0 && ['pending', 'ongoing'].contains(game_phase)">
+                    :disabled="!deal_cards_action_active">
                 Deal cards
             </button>
             <button class="button"
                     v-on:click="next_game()"
-                    v-if="['finished', 'cancelled'].contains(game_phase)">
+                    :disabled="!next_game_action_active">
                 Next game
             </button>
         </div>

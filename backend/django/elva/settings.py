@@ -26,7 +26,7 @@ DEBUG = bool(os.getenv('DEBUG', False))
 SECRET_KEY = os.getenv('ELVA_SECRET_KEY',
                        'quyw231e24m*_s=8)g_wr7oqfg!9t)w+g%)wb7m7v9o8$83oso' if DEBUG else None)  # FYI: None not allowed
 
-ALLOWED_HOSTS = ['192.168.2.128', '192.168.99.100', 'localhost', '127.0.0.1', 'pasur.matbj.com', '.pasur.se']
+ALLOWED_HOSTS = ['192.168.1.128', '192.168.99.100', 'localhost', '127.0.0.1', 'pasur.matbj.com', '.pasur.se']
 
 
 # Application definition

@@ -115,7 +115,7 @@ elva.app = new Vue({
         cards_on_board: [],
         cards_in_hand: [],
         number_of_cards_in_pile: 0,
-        number_of_cards_in_deck: 0,
+        number_of_cards_in_deck: 52,
         no_player_has_cards_on_hand: true,
         opponents: [],
         player_in_turn: '',
@@ -156,47 +156,59 @@ elva.app = new Vue({
                 'message': 'Player played a card',
                 'player_action': elva_config.player_actions.PLAY_CARD,
                 'played_card': card_id,
-                'collect_cards': elva.app.collectedCards
+                'collect_cards': this.collected_cards
             });
         },
         is_in_turn: function (identifier) {
-            if (!elva.app) return '';
-
-            if (identifier === elva.app.player_in_turn && 'ongoing' === elva.app.game_phase ) {
+            if (identifier === this.player_in_turn && 'ongoing' === this.game_phase ) {
                 return 'in_turn';
             } else {
                 return '';
             }
         },
         select_card_for_collection: function (card_id) {
-            if (elva.app.selected_cards.includes(card_id)) {
-                elva.app.selected_cards = elva.app.selected_cards.filter(function (ci) {
+            if (this.selected_cards.includes(card_id)) {
+                this.selected_cards = elva.app.selected_cards.filter(function (ci) {
                     return ci !== card_id;
                 });
             } else {
-                elva.app.selected_cards.push(card_id);
+                this.selected_cards.push(card_id);
             }
         },
         selected_class: function (card_id) {
-            return elva.app.selected_cards.includes(card_id) ? 'selected_card' : '';
+            return this.selected_cards.includes(card_id) ? 'selected_card' : '';
         },
         opponent_class: function (index) {
             let opponent_top = 'opponent_top';
             let opponent_left = 'opponent_left';
             let opponent_right = 'opponent_right';
-            if (elva.app.opponents.length === 1) return opponent_top;
+            if (this.opponents.length === 1) return opponent_top;
             else return [opponent_left, opponent_top, opponent_right][index];
         },
     },
     computed: {
-        collectedCards: function () {
-            let selected_cards = elva.app.cards_on_board.filter(function (element) {
-                return elva.app.selected_cards.includes(element.id);
+        collected_cards: function () {
+            let elva_app = this;
+            let selected_cards = this.cards_on_board.filter(function (element) {
+                return elva_app.selected_cards.includes(element.id);
             });
-            elva.app.selected_cards = selected_cards.map(function (element) {
+            this.selected_cards = selected_cards.map(function (element) {
                 return element.id;
             });
-            return elva.app.selected_cards;
+            return this.selected_cards;
+        },
+        deal_cards_action_active: function () {
+            return this.no_player_has_cards_on_hand
+                && this.number_of_cards_in_deck > 0
+                && ['pending', 'ongoing'].contains(this.game_phase);
+        },
+        count_points_action_active: function () {
+            return this.no_player_has_cards_on_hand &&
+                this.number_of_cards_in_deck === 0 &&
+                Object.keys(this.player_points).length === 0;
+        },
+        next_game_action_active: function () {
+            return ['finished', 'cancelled'].contains(this.game_phase);
         }
     }
 });
