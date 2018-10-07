@@ -1,11 +1,5 @@
 const elva = {};
 
-elva.roomName = elva_config.room_name_json;  // From django context
-
-elva.chat_log = $('#chat-log');
-elva.chat_message_input = $('#chat-message-input');
-elva.chat_message_submit = $('#chat-message-submit');
-
 elva.webSocketBridge = new channels.WebSocketBridge();
 elva.webSocketBridge.connect(elva_config.ws_game_url);
 elva.webSocketBridge.socket.addEventListener('open', function() {
@@ -48,9 +42,6 @@ elva.cards_json_to_cards = function(cards_json) {
 };
 elva.webSocketBridge.listen(function(action, stream) {
     console.log(action, stream);
-    elva.chat_log.val(function (_, current) {
-        return current + (action.message + '\n');
-    });
     console.log(action.game_status);
     let game_status = action.game_status;
     if (game_status !== undefined) {
@@ -74,13 +65,7 @@ elva.webSocketBridge.listen(function(action, stream) {
     elva.app.update_status();
 });
 
-elva.chat_message_input.focus();
-elva.chat_message_input.keyup(function(e) {
-    if (e.keyCode === 13) {  // enter, return
-        elva.chat_message_submit.click();
-    }
-});
-
+// INCLUDE vue resources to do the below thingy
 //Vue.http.headers.common['X-CSRFToken'] = "{{ csrf_token }}";
 
 Vue.component('card', {
@@ -203,7 +188,7 @@ elva.app = new Vue({
             } else if (this.opponents.length === 0) {
                 this.warning_message = "Invite opponent to the game";
             } else if (!this.is_connected) {
-                this.warning_message = "You are not connected to the server, retrying...";
+                this.warning_message = "You are not connected to the server, reconnecting...";
             } else {
                 this.warning_message = '';
             }

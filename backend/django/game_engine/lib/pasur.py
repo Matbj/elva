@@ -13,6 +13,9 @@ class STATUS(DjangoChoices):
     cancelled = ChoiceItem()
 
 
+MAX_PLAYER_COUNT = 4
+WINNING_POINT_COUNT = 62
+
 CLUBS_WIN_POINT = 7
 CLUBS_TWO_POINT = 2
 DIAMONDS_TEN_POINT = 3

@@ -1,0 +1,19 @@
+{% extends "ws/base.html" %}
+{% load staticfiles %}
+{% load humanize %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static "/ws/css/pasur-menu.css" %}">
+{% endblock %}
+
+{% block js_config %}
+    {% include "ws/elva_menu_config.js.html" %}
+{% endblock %}
+
+{% block body %}
+    {% include "ws/elva_menu.vue" %}
+{% endblock %}
+
+{% block script_import_js %}
+    <script src="{% static "ws/js/elva_menu.js" %}"></script>
+{% endblock %}

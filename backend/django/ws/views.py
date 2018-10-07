@@ -8,6 +8,7 @@ from django.views import View
 from game_engine import models
 from game_engine.lib.pasur import STATUS
 from ws.pasur_interface import PlayerActions
+from ws.pasur_menu_interface import PasurMenuInterface
 
 
 class PasurGameView(View):
@@ -22,12 +23,14 @@ class PasurGameView(View):
         game = match.get_latest_game()
         player, _ = models.Player.objects.get_or_create(name=request.user.username)
         if game and game.status == STATUS.pending:
-            models.MatchPlayer.objects.get_or_create(
+            _, created = models.MatchPlayer.objects.get_or_create(
                 match=match,
                 player=player,
             )
+            if created:
+                PasurMenuInterface.notify_new_player_joined_game()
 
-        return render(request, 'ws/pasur.html', {
+        return render(request, 'ws/elva.html', {
             'match_id': match.pk,
             'PlayerActions': PlayerActions,
             'player': player,
@@ -39,14 +42,17 @@ class NewPasurGameView(View):
         match = models.Match()
         match.save()
         models.Game(match=match).save()
+        PasurMenuInterface.notify_new_game_was_created()
         return redirect(to='pasur_match', match_id=match.pk)
 
 
 class PasurMenuView(View):
 
     def get(self, request):
+        if request.user.is_anonymous:
+            return redirect('create_user')
         matches = models.Match.objects.prefetch_related('game_players').order_by('-created')[0:10]
-        return render(request, 'ws/pasur_menu.html', context={
+        return render(request, 'ws/elva_menu.html', context={
             'matches': matches,
         })
 
@@ -63,4 +69,4 @@ class CreateUserView(View):
         if match_id:
             return redirect('pasur_match', match_id=match_id)
         else:
-            return redirect('new_pasur_match')
+            return redirect('index')

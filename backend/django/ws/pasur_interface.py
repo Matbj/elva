@@ -1,10 +1,9 @@
 import json
-from django.db import transaction
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth.models import User
-from django.db.models import Sum
+from django.db import transaction
 from django.utils.html import escape
 from djchoices import DjangoChoices, ChoiceItem
 
@@ -24,7 +23,7 @@ class PlayerActions(DjangoChoices):
 
 class PasurInterface(WebsocketConsumer):
 
-    def get_game_status(self, pasur: Pasur, game_id):
+    def get_game_status(self, pasur: Pasur, player_points):
         player_ch: PlayerCardHolder = pasur.card_holders.get(self.player.name)
 
         game_status = {
@@ -68,30 +67,18 @@ class PasurInterface(WebsocketConsumer):
                     'id': c.id,
                 } for c in pasur.last_collected_cards
             ],
-            'player_points': self.get_points_status(pasur, game_id) if pasur.status == STATUS.finished else {},
+            'player_points': player_points,
         }
         return game_status
 
-    def get_points_status(self, pasur: Pasur, game_id: int):
-        points = {}
-        for player in pasur.players:
-            pms = models.GameMatchPlayerScore.objects\
-                .filter(match_player__player__name=player.identifier)\
-                .filter(match_player__match=self.match)
-            points[player.identifier] = {
-                'total': pms.aggregate(Sum('score')).get('score__sum', 0),
-                'current_game': pms.filter(game_id=game_id).aggregate(Sum('score')).get('score__sum', 0)
-            }
-        return points
-
-    def push_to_group(self, message, pasur, game_id):
+    def push_to_group(self, message, pasur):
         async_to_sync(self.channel_layer.group_send)(
             self.match_group_id,
             {
                 'type': 'game_status',
                 'message': message,
                 'pasur': pasur.dump_json(),
-                'game_id': game_id,
+                'player_points': self.match.count_player_points(pasur) if pasur.status == STATUS.finished else {},
             }
         )
 
@@ -110,13 +97,12 @@ class PasurInterface(WebsocketConsumer):
             self.channel_name,
         )
 
+        self.accept()
         game = self.match.get_latest_game()
         self.push_to_group(
             message=f"Player joined {self.player.name}",
             pasur=game.pasur,
-            game_id=game.pk,
         )
-        self.accept()
 
     def disconnect(self, close_code):
         # Leave room group
@@ -178,7 +164,6 @@ class PasurInterface(WebsocketConsumer):
                 self.push_to_group(
                     message=message,
                     pasur=game.pasur,
-                    game_id=game.pk,
                 )
             except PasurIllegalAction as e:
                 message = 'ERROR ({}): {}'.format(self.player.name, e)
@@ -188,10 +173,10 @@ class PasurInterface(WebsocketConsumer):
     def game_status(self, event):
         message = event['message']
         pasur = Pasur.load_json(event['pasur'])
-        game_id = event['game_id']
+        player_points = event['player_points']
 
         # Send message to WebSocket
         self.send(text_data=json.dumps({
-            'game_status': self.get_game_status(pasur=pasur, game_id=game_id),
+            'game_status': self.get_game_status(pasur=pasur, player_points=player_points),
             'message': escape(message),
         }))

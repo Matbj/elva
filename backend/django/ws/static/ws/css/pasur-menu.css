@@ -5,7 +5,17 @@
 }
 
 .pasur-menu-table {
-    /*padding: 10%;*/
+}
+
+.matches-move {
+  transition: transform 1s;
+}
+.matches-enter-active, .matches-leave-active {
+  transition: all 1s;
+}
+.matches-enter, .matches-leave-to /* .matches-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 
 .pasur-menu-match-card {
@@ -17,9 +27,21 @@
 .pasur-menu-match-card:hover {
     background-color: #00c4a7;
 }
-@media (min-width: 800px) {
+@media (min-width: 700px) {
     .pasur-menu-match-card-outer {
         float: left;
         width: 50%;
+    }
+}
+@media (min-width: 1200px) {
+    .pasur-menu-match-card-outer {
+        float: left;
+        width: 33.3%;
+    }
+}
+@media (min-width: 1600px) {
+    .pasur-menu-match-card-outer {
+        float: left;
+        width: 25%;
     }
 }

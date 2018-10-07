@@ -6,12 +6,12 @@
     <link rel="stylesheet" type="text/css" href="{% static "ws/css/pasur.css" %}"/>
 {% endblock %}
 
-{% block body %}
-    {% include "ws/elva.vue" %}
-{% endblock %}
-
 {% block js_config %}
     {% include "ws/elva_config.js.html" %}
+{% endblock %}
+
+{% block body %}
+    {% include "ws/elva.vue" %}
 {% endblock %}
 
 {% block script_import_js %}
