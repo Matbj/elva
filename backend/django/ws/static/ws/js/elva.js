@@ -200,7 +200,8 @@ elva.app = new Vue({
         deal_cards_action_active: function () {
             return this.no_player_has_cards_on_hand
                 && this.number_of_cards_in_deck > 0
-                && ['pending', 'ongoing'].contains(this.game_phase);
+                && ['pending', 'ongoing'].contains(this.game_phase)
+                && this.opponents.length >= 1;
         },
         count_points_action_active: function () {
             return this.no_player_has_cards_on_hand &&
