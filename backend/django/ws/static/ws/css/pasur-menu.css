@@ -5,23 +5,39 @@
 }
 
 .pasur-menu-table {
+    overflow-x: hidden;
 }
 
 .matches-move {
-  transition: transform 1s;
+    transition: transform 1s;
 }
-.matches-enter-active, .matches-leave-active {
-  transition: all 1s;
+.matches-enter-active {
+    transition: all 1s;
+    animation: bounce-in .5s;
 }
-.matches-enter, .matches-leave-to /* .matches-leave-active below version 2.1.8 */ {
-  opacity: 0;
-  transform: translateY(30px);
+.matches-leave-active {
+    position: absolute;
+    animation: bounce-in .5s reverse;
+}
+.matches-enter, .matches-leave-to {
+    opacity: 0;
+    transform: translateY(-50px);
+}
+@keyframes bounce-in {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .pasur-menu-match-card {
     margin: 1em;
     padding: 0.7em;
-    transition: all 0.3s;
 }
 
 .pasur-menu-match-card:hover {
