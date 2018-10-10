@@ -10,6 +10,7 @@ from djchoices import DjangoChoices, ChoiceItem
 from game_engine import models
 from game_engine.lib.card_holders import Player as PlayerCardHolder
 from game_engine.lib.pasur import PasurIllegalAction, STATUS, Pasur
+from game_engine.models import Game
 
 
 class PlayerActions(DjangoChoices):
@@ -71,14 +72,14 @@ class PasurInterface(WebsocketConsumer):
         }
         return game_status
 
-    def push_to_group(self, message, pasur):
+    def push_to_group(self, message, game: Game):
         async_to_sync(self.channel_layer.group_send)(
             self.match_group_id,
             {
                 'type': 'game_status',
                 'message': message,
-                'pasur': pasur.dump_json(),
-                'player_points': self.match.count_player_points(pasur) if pasur.status == STATUS.finished else {},
+                'pasur': game.pasur.dump_json(),
+                'player_points': self.match.count_player_points(game) if game.pasur.status == STATUS.finished else {},
             }
         )
 
@@ -98,10 +99,9 @@ class PasurInterface(WebsocketConsumer):
         )
 
         self.accept()
-        game = self.match.get_latest_game()
         self.push_to_group(
             message=f"Player joined {self.player.name}",
-            pasur=game.pasur,
+            game=self.match.get_latest_game(),
         )
 
     def disconnect(self, close_code):
@@ -163,7 +163,7 @@ class PasurInterface(WebsocketConsumer):
                 # Send message to room group
                 self.push_to_group(
                     message=message,
-                    pasur=game.pasur,
+                    game=game,
                 )
             except PasurIllegalAction as e:
                 message = 'ERROR ({}): {}'.format(self.player.name, e)

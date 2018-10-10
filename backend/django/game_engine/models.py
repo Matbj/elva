@@ -49,7 +49,7 @@ class Match(GameModel):
                 print(e)
         return False
 
-    def count_player_points(self, current_game=None):
+    def count_player_points(self, current_game: "Game"=None):
         current_game = current_game or self.get_latest_game()
         points = {}
         for player in self.game_players.all():
